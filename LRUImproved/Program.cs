@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 
 namespace LRUImproved
 {
@@ -6,7 +7,8 @@ namespace LRUImproved
     {
         static void Main(string[] args)
         {
-            var lrucache = new LRUCache<int, string>();
+            Random gen = new Random();
+            var lrucache = new LRUCache<int, string>(5);
 
             lrucache.Put(1, "karan");
             lrucache.Put(2, "megan");
@@ -14,7 +16,11 @@ namespace LRUImproved
             lrucache.Put(4, "zanlin");
             lrucache.Put(5, "wailinn");
 
-            Console.WriteLine(lrucache.Get(2));
+            for (int i = 0; i < 5; i++)
+            {
+                var num = gen.Next(1,lrucache.Count);
+                Console.WriteLine($"Getting {num}: {lrucache.Get(num)}");
+            }
 
         }
     }

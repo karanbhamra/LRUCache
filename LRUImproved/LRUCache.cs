@@ -25,9 +25,16 @@ namespace LRUImproved
 
     public class LRUCache<Tkey, TValue> : ICache<Tkey, TValue>
     {
+        // list that will store kvp of items added to cache
         LinkedList<KeyValuePair<Tkey, TValue>> list;
+        
+        // dictionary that will hold nodes for constant time lookup
         Dictionary<Tkey, LinkedListNode<KeyValuePair<Tkey, TValue>>> cache;
+        
+        // property used to enforce lru 
         int capacity;
+
+        // count of total items in cache
         public int Count { get; private set; }
         public LRUCache(int cap = 4)
         {
@@ -39,7 +46,7 @@ namespace LRUImproved
 
         public void Put(Tkey key, TValue value)
         {
-            // if cache contains key, add it to top
+            // if cache contains key, get the node for the key, remove it from list, set new value and add it to top
             if (cache.ContainsKey(key))
             {
                 var existingNode = cache[key];
@@ -55,7 +62,7 @@ namespace LRUImproved
             // check if cache is full
             if (Count == capacity)
             {
-                // drop the tail (least recently used item), and remove it from the cache also
+                // drop the tail (least recently used item), and also remove it from the cache
                 var lruNode = list.Last;
                 list.RemoveLast();
                 cache.Remove(lruNode.Value.Key);
@@ -73,7 +80,6 @@ namespace LRUImproved
         public TValue Get(Tkey key)
         {
             // if in the cache, get the node, remove node from its position and then move it to head, return it
-
             if (cache.ContainsKey(key))
             {
                 // get the node containing the key value pair and return kvp's value
